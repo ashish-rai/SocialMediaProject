@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,15 +10,47 @@
 
     <!-- You can add additional CSS or JavaScript files here -->
     <!-- For example: <link rel="stylesheet" href="styles.css"> -->
-</head>
+<!-- </head>
 <body>
     <header>
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
-                <li><a href="#news">News</a></li>
-                <li><a href="#contact">Contact</a></li>
                 <li style="float:right"><a class="active" href="/profile/">Profile</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+    <main>
+
+    </main>
+</body>
+</html> --> -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Homepage</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <link rel="stylesheet" href="{% static 'dropdown.css' %}">
+                <li><a href="#home">Home</a></li>
+                <li style="float:right" class="dropdown">
+                    <a class="active dropbtn" id="profileLink">Profile</a>
+                    <div class="dropdown-content" id="profileDropdown">
+                        
+                        <a href="/profile/">View Profile</a>
+                        <a href="/logout/">Logout</a>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>

@@ -57,9 +57,16 @@
 </head>
 <body>
     <div class="container">
-        <form class="login-form" action="{% url 'signup' %}" method="post">
+        <form class="login-form" action="{% url 'login' %}" method="post">
             {% csrf_token %}
             <h2>Login</h2>
+
+            {% if error %}
+                <div style="text-align: center;">
+                    <span style="color: red;">{{error}}</span>
+                </div>
+                <br>
+            {% endif %}
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>

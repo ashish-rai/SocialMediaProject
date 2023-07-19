@@ -61,6 +61,18 @@
         <form class="signup-form" action="{% url 'signup' %}" method="post">
             {% csrf_token %}
             <h2>Signup</h2>
+
+            <div>
+                <style>
+                    h5{
+                        color: red;
+                    }
+                </style>
+                {% for message in messages %}
+                    <h5>{{message}}</h5>
+                {% endfor %}
+            </div>
+
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="email">Email:</label>
