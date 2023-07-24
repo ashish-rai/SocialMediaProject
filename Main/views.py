@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login,get_user_model
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login,get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from main.models import UserProfile
+from main.models import UserProfile, Post
+from main.forms import UserProfileForm, PostForm
+from django.contrib.auth.models import User
 
 User = get_user_model()
 
@@ -62,7 +64,61 @@ def Login(request):
     
     return render(request, 'login.html')
 
-def Profile(request):
-    current_user = request.user
-    return render(request,'profile.html', {'user': current_user})
+def logout_view(request):
+    logout(request)
+    return redirect('homepage') 
 
+def Profile(request):
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+    return render(request, 'profile.html', {'user_profile': user_profile})
+
+# class ProfileUpdateView(View):
+#     def get(self, request, slug):
+#         profile = get_object_or_404(UserProfile, user__username=slug)
+#         form = ProfileForm(instance=profile)
+#         context = {
+#             'form': form
+#         }
+#         return render(request, 'edit.html', context)
+
+#     def post(self, request, slug):
+#         profile = get_object_or_404(UserProfile, user__username=slug)
+#         form = ProfileForm(request.POST, request.FILES, instance=profile)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile', slug=slug)
+#         return render(request, 'edit.html', {'form': form})
+
+@login_required
+def edit_profile(request):
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
+def homepage(request):
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)  
+            post.user = request.user  
+            post.save() 
+            return redirect('homepage')
+
+    else:
+        form = PostForm()
+
+    posts = Post.objects.all()
+    users = User.objects.exclude(pk=request.user.pk)
+    return render(request, 'homepage.html', {'form': form, 'posts': posts, 'users': users},)
+
+def view_post(request):
+    posts = Post.objects.all()
+    return render(request,'ViewPost.html', {'posts': posts})

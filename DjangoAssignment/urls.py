@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,10 @@ urlpatterns = [
     path('login/', views.Login, name="login"),
     path('', views.Homepage, name="homepage"),
     path('profile/', views.Profile, name="profile"),
+    path('logout/', views.logout_view, name="logout"),
+    path('edit_profile/', views.edit_profile, name="edit_profile"),
+    path('post', views.view_post, name="post")
+   
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

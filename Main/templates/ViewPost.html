@@ -1,0 +1,21 @@
+{% load static %}
+!DOCTYPE html>
+<html>
+<head>
+    <title>Posts</title>
+</head>
+<body>
+    <h1>Posts</h1>
+    {% for post in posts %}
+        <div>
+            <h2>{{ post.caption }}</h2>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.caption }}">
+            {% endif %}
+            <p>User: {{ post.user }}</p>
+            <p>Likes: {{ post.no_of_likes }}</p>
+            <p>Created at: {{ post.created_at }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

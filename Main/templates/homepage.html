@@ -1,61 +1,82 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Homepage</title>
-
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'main.css' %}"
-
-    <!-- You can add additional CSS or JavaScript files here -->
-    <!-- For example: <link rel="stylesheet" href="styles.css"> -->
-<!-- </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li style="float:right"><a class="active" href="/profile/">Profile</a></li>
-                
-            </ul>
-        </nav>
-    </header>
-    <main>
-
-    </main>
-</body>
-</html> --> -->
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Homepage</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
+
 <body>
     <header>
         <nav>
             <ul>
-                <link rel="stylesheet" href="{% static 'dropdown.css' %}">
-                <li><a href="#home">Home</a></li>
-                <li style="float:right" class="dropdown">
-                    <a class="active dropbtn" id="profileLink">Profile</a>
-                    <div class="dropdown-content" id="profileDropdown">
-                        
-                        <a href="/profile/">View Profile</a>
-                        <a href="/logout/">Logout</a>
+                <a href="{% url 'homepage' %}" class="logo-link">
+                    <img src="{% static 'images/Logo.png' %}" alt="Logo" style="width: 100px; height: 100px;">
+                </a>
+            </li>
+                <li class="dropdown" style="float: right;">
+                    <a class="dropbtn">Profile</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'profile' %}">View Profile</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                     </div>
                 </li>
             </ul>
         </nav>
     </header>
     <main>
+        <h1> Home </h1>
+        
+        <button id="upload-btn">Upload</button>
 
+        <div class="upload-post" style="display: none;">
+            <h2>Upload a Post</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image">
+
+                <label for="caption">Caption:</label>
+                <textarea id="caption" name="caption" required></textarea>
+
+                <label for="no_of_likes">Number of Likes:</label>
+                <input type="number" id="no_of_likes" name="no_of_likes" value="0" required>
+
+                <button type="submit">Submit Post</button>
+            </form>
+        </div>
+
+        {% for post in posts %}
+        <div class="post">
+            <h2>{{ post.caption }}</h2>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.caption }}">
+            {% endif %}
+            <p>User: {{ post.user }}</p>
+            <p>Likes: {{ post.no_of_likes }}</p>
+            <p>Created at: {{ post.created_at }}</p>
+        </div>
+        {% endfor %}
+
+        <div class="user-suggestions">
+            <h3>User Suggestions:</h3>
+            <ul>
+                {% for user in users %}
+                    <li>{{ user.username }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </main>
+
+    <script>
+        document.getElementById('upload-btn').addEventListener('click', function() {
+            document.querySelector('.upload-post').style.display = 'block';
+        });
+    </script>
 </body>
+
 </html>

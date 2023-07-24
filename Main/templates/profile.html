@@ -1,40 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
 
-    <link rel="stylesheet" href="{% static 'profile.css' %}">
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #006effd7;
+        }
+
+        a:hover {
+            color: #b30068;
+        }
+    </style>
 </head>
 <body>
-    <div class="card-container">
-        <img class="round" src="https://randomuser.me/api/portraits/women/79.jpg" alt="user" />
-        <h3>{{ user.username }}</h3>
-        <h6>New York</h6>
-        <p>User interface designer and <br/> front-end developer</p>
-        <div class="buttons">
-            <button class="primary">
-                Message
-            </button>
-            <button class="primary ghost">
-                Following
-            </button>
-        </div>
-        <div class="skills">
-            <h6>Skills</h6>
-            <ul>
-                <li>UI / UX</li>
-                <li>Front End Development</li>
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>JavaScript</li>
-                <li>React</li>
-                <li>Node</li>
-            </ul>
-        </div>
-    </div>
+<a href="{% url 'homepage' %}" class="logo-link">
+    <img src="{% static 'images/Logo.png' %}" alt="Logo" style="width: 100px; height: 100px;">
+</a>
+<h1> Your Profile </h1>
+<p>Username: {{ user_profile.user.username }}</p>
+<p>Email: {{ user_profile.user.email }}</p>
+<p>Bio: {{ user_profile.bio }}</p>
+<p>Location: {{ user_profile.locations }}</p>
+<p>Gender: {{ user_profile.get_gender_display }}</p>
+
+
+<a href="{% url 'edit_profile' %}">Edit Profile</a>
 
 </body>
 </html>
