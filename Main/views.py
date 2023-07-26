@@ -8,10 +8,7 @@ from django.contrib.auth.models import User
 
 User = get_user_model()
 
-# Create your views here
-@login_required
-def Homepage(request):
-    return render(request,'homepage.html')
+
 
 def Signup(request):
     
@@ -102,8 +99,8 @@ def edit_profile(request):
 
     return render(request, 'edit_profile.html', {'form': form})
 
-def homepage(request):
-    
+@login_required
+def Homepage(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
