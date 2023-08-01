@@ -31,6 +31,11 @@
         a:hover {
             color: #b30068;
         }
+        .logo-link {
+            position: absolute;
+            top: 80px;
+            left: 40px;
+        }
     </style>
 </head>
 <body>
@@ -38,11 +43,35 @@
     <img src="{% static 'images/Logo.png' %}" alt="Logo" style="width: 100px; height: 100px;">
 </a>
 <h1> Your Profile </h1>
+{% if user_profile.profile_picture %}
+    <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+{% else %}
+    <img src="{% static 'images/profile.jpg' %}" alt="Default Profile Picture" class="profile-picture" style="width: 200px; height: 200px;">
+{% endif %}
+
 <p>Username: {{ user_profile.user.username }}</p>
 <p>Email: {{ user_profile.user.email }}</p>
 <p>Bio: {{ user_profile.bio }}</p>
 <p>Location: {{ user_profile.locations }}</p>
 <p>Gender: {{ user_profile.get_gender_display }}</p>
+
+<h2>Your Posts:</h2>
+{% if user_posts %}
+  <ul>
+    {% for post in user_posts %}
+      <li>
+        {% if post.image %}
+          <img src="{{ post.image.url }}" alt="Post Image">
+        {% endif %}
+        <p>{{ post.caption }}</p>
+        <p>Likes: {{ post.no_of_likes }}</p>
+        <!-- Add more post information here if needed -->
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No posts to display.</p>
+{% endif %}
 
 
 <a href="{% url 'edit_profile' %}">Edit Profile</a>

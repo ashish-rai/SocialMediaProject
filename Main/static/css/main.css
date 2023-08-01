@@ -13,6 +13,9 @@
     background-color: inherit;
     font-family: inherit;
     margin: 0;
+    highlighted {
+        color: #b30068;
+    }
 }
   
 .navbar a:hover, .dropdown:hover .dropbtn {
@@ -132,30 +135,23 @@ form button:hover {
 .post p {
     margin-bottom: 5px;
 }
-
-
-
-
-/* Style the profile dropdown
-.dropdown-content {
+.dropdown .default-profile-picture {
     display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 100px;
-    z-index: 1;
 }
 
-.dropdown-content a {
+.dropdown .profile-picture {
     display: block;
+}
+.user-suggestions {
+    position: fixed;    
+    width: 200px;
+    top: 150px;
+    right: 40px; 
+    background: #b9d5dc;
+    border: 1px solid #464fc8; 
     padding: 10px;
-    text-decoration: none;
-    color: #333;
+     
 }
-
-.dropdown-content a:hover {
-    background-color: #ddd;
-}
- */
 
 
 

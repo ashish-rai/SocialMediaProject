@@ -3,9 +3,8 @@ from django.contrib.auth import authenticate, login,get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from main.models import UserProfile, Post
-from main.forms import UserProfileForm, PostForm
+from main.forms import UserProfileForm, PostForm, CommentForm
 from django.contrib.auth.models import User
-
 User = get_user_model()
 
 
@@ -67,7 +66,11 @@ def logout_view(request):
 
 def Profile(request):
     user_profile, created = UserProfile.objects.get_or_create(user=request.user)
-    return render(request, 'profile.html', {'user_profile': user_profile})
+    user_posts = Post.objects.filter(user=user_profile) 
+    return render(request, 'profile.html', {'user_profile': user_profile, 'user_posts': user_posts,})
+# def Profile(request):
+#     user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+#     return render(request, 'profile.html', {'user_profile': user_profile})
 
 # class ProfileUpdateView(View):
 #     def get(self, request, slug):
@@ -114,8 +117,23 @@ def Homepage(request):
 
     posts = Post.objects.all()
     users = User.objects.exclude(pk=request.user.pk)
-    return render(request, 'homepage.html', {'form': form, 'posts': posts, 'users': users},)
+
+    if request.method == 'POST' and 'comment_post_id' in request.POST:
+        post_id = request.POST['comment_post_id']
+        post = Post.objects.get(pk=post_id)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            comment.post = post
+            comment.save()
+            return redirect('homepage')
+
+    else:
+        comment_form = CommentForm()
+    return render(request, 'homepage.html', {'form': form, 'posts': posts, 'users': users, 'comment_form': comment_form})
 
 def view_post(request):
     posts = Post.objects.all()
     return render(request,'ViewPost.html', {'posts': posts})
+

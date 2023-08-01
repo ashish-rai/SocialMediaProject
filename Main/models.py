@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
 
 class UserProfile(models.Model):
@@ -11,7 +12,8 @@ class UserProfile(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_profile')
     id_user = models.IntegerField()
     bio = models.TextField(blank='true')
     profile_pic = models.ImageField(upload_to='profle', default='default.png')
@@ -29,7 +31,17 @@ class Post(models.Model):
     caption = models.TextField()
     created_at = models.DateTimeField(default=datetime.now)
     no_of_likes = models.IntegerField(default=0)
+    allow_comments = models.BooleanField(default=True) 
 
     def __str__(self):
         return self.caption
     
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.created_date}"
+    
+
